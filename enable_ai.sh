@@ -331,7 +331,7 @@ while [ $SECONDS_PASSED -lt $MAX_WAIT_TIME ]; do
     sudo lldb --batch \
     -o "process attach --name eligibilityd" \
     -o "expression (void) [[[InputManager sharedInstance] objectForInputValue:6] setValue:@\"LL\" forKey:@\"_deviceRegionCode\"]" \
-    -o "expression -l objc -- @import Foundation; id $e = [EligibilityEngine sharedInstance]; NSArray<NSString*> *sels = @[@"_onQueue_recomputeAllDomainAnswers", @"recomputeAllDomainAnswers"]; for (NSString *selName in sels) { SEL sel = NSSelectorFromString(selName); if ([(NSObject *)$e respondsToSelector:sel]) { (void)[(NSObject *)$e performSelector:sel]; NSLog(@"%@ performed", selName); break; } }" \
+    -o "-o "expression -l objc -- id \$e = [EligibilityEngine sharedInstance]; if ([\$e respondsToSelector:@selector(_onQueue_recomputeAllDomainAnswers)]) { [\$e _onQueue_recomputeAllDomainAnswers]; } else if ([\$e respondsToSelector:@selector(recomputeAllDomainAnswers)]) { [\$e recomputeAllDomainAnswers]; }" \
     -o "process detach" \
     -o quit
 
